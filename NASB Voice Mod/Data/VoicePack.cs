@@ -84,7 +84,7 @@ namespace VoiceMod.Data
         {
             AudioType audioType;
                 
-            switch(Path.GetExtension(path))
+            switch(Path.GetExtension(path).ToLower())
             {
                 case ".wav":
                     audioType = AudioType.WAV;
