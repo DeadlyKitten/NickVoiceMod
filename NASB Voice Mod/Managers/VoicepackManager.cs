@@ -1,0 +1,100 @@
+﻿using BepInEx;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using VoiceMod.Data;
+
+namespace VoiceMod.Managers
+{
+    class VoicepackManager
+    {
+        private readonly AudioSource audioPlayer;
+
+        public static VoicepackManager Instance
+        {
+            get;
+            private set;
+        }
+
+        public List<Voicepack> voicepacks = new List<Voicepack>();
+
+        public VoicepackManager()
+        {
+            Instance = this;
+
+            audioPlayer = new GameObject("VoiceMod Audio Player").AddComponent<AudioSource>();
+            GameObject.DontDestroyOnLoad(audioPlayer.gameObject);
+
+            Task.Run(() => LoadAllVoicepacks());
+        }
+
+        private void LoadAllVoicepacks()
+        {
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
+            var folder = Path.Combine(Paths.BepInExRootPath, "Voicepacks");
+            Directory.CreateDirectory(folder);
+            var files = Directory.GetFiles(folder, "*.zip");
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    using (ZipArchive archive = ZipFile.OpenRead(file))
+                    {
+                        var jsonEntry = archive.Entries.FirstOrDefault(i => i.Name == "package.json");
+                        if (jsonEntry == null)
+                        {
+                            ThreadingHelper.Instance.StartSyncInvoke(() =>
+                            {
+                                Plugin.LogWarning($"Missing 'package.json' in: {Path.GetFileName(file)}\nSkipping!");
+                            });
+
+                            continue;
+                        }
+
+                        Voicepack json = null;
+                        if (jsonEntry != null)
+                        {
+                            var stream = new StreamReader(jsonEntry.Open(), Encoding.Default);
+                            var jsonString = stream.ReadToEnd();
+                            json = JsonConvert.DeserializeObject<Voicepack>(jsonString);
+                            json.zipPath = file;
+                        }
+
+                        if (!(json == null) && json.voiceClips.Any()) voicepacks.Add(json);
+                    }
+                }
+                catch (Exception e)
+                {
+                    ThreadingHelper.Instance.StartSyncInvoke(() =>
+                    {
+                        Plugin.LogError($"Error loading voicepack from {file}\n{e.Message}\n{e.StackTrace}");
+                    });
+                }
+            }
+
+            stopwatch.Stop();
+            ThreadingHelper.Instance.StartSyncInvoke(() =>
+            {
+                Plugin.LogInfo($"Loaded {voicepacks.Count()} voice pack{(voicepacks.Count() == 1 ? "" : "s")} in {stopwatch.ElapsedMilliseconds} ms.");
+            });
+        }
+
+        public bool TryGetVoicepackWithId(string id, out Voicepack result)
+        {
+            result = voicepacks.FirstOrDefault(x => x.characterId == id);
+
+            return result != null;
+        }
+
+        public void PlayClip(AudioClip clip, float volume) => audioPlayer.PlayOneShot(clip, volume);
+    }
+}
