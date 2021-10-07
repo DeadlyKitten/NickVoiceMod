@@ -12,7 +12,9 @@ The easiest way to install this is to use the [Slime Mod Manager](https://github
 *If your game isn't modded with BepinEx, DO THAT FIRST!*
 Simply go to the [latest BepinEx release](https://github.com/BepInEx/BepInEx/releases) and extract `BepinEx_x64_VERSION.zip` directly into your game's folder, then run the game once to install BepinEx properly.
 
-Then, go to the [latest release of this mod](https://github.com/DeadlyKitten/NickVoiceMod/releases/latest) and extract the zip in your game's install directory.
+This mod also requires Newtonsoft.JSON. You can download a copy of that [here](https://github.com/legoandmars/Newtonsoft.Json/releases/tag/12.0.3). Simply extract to the game's root folder.
+
+Then, go to the [latest release of this mod](https://github.com/DeadlyKitten/NickVoiceMod/releases/latest) and extract the zip in your game's root folder.
 
 ## Usage
 
