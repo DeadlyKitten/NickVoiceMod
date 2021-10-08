@@ -43,7 +43,8 @@ namespace VoiceMod.Managers
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
-            var files = Directory.GetFiles(folder, "*.zip");
+            string[] supportedFileTypes = { ".zip", ".voicepack" };
+            var files = Directory.GetFiles(folder).Where(x => supportedFileTypes.Contains(Path.GetExtension(x).ToLower()));
 
             foreach (var file in files)
             {
