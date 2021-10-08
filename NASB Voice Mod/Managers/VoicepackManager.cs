@@ -22,6 +22,8 @@ namespace VoiceMod.Managers
             private set;
         }
 
+        public static string folder = Path.Combine(Paths.BepInExRootPath, "Voicepacks");
+
         public List<Voicepack> voicepacks = new List<Voicepack>();
 
         public VoicepackManager()
@@ -31,6 +33,8 @@ namespace VoiceMod.Managers
             audioPlayer = new GameObject("VoiceMod Audio Player").AddComponent<AudioSource>();
             GameObject.DontDestroyOnLoad(audioPlayer.gameObject);
 
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
             Task.Run(() => LoadAllVoicepacks());
         }
 
@@ -39,9 +43,8 @@ namespace VoiceMod.Managers
             var stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
-            var folder = Path.Combine(Paths.BepInExRootPath, "Voicepacks");
-            Directory.CreateDirectory(folder);
-            var files = Directory.GetFiles(folder, "*.zip");
+            string[] supportedFileTypes = { ".zip", ".voicepack" };
+            var files = Directory.GetFiles(folder).Where(x => supportedFileTypes.Contains(Path.GetExtension(x).ToLower()));
 
             foreach (var file in files)
             {

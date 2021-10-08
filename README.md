@@ -20,7 +20,7 @@ Then, go to the [latest release of this mod](https://github.com/DeadlyKitten/Nic
 
 Place voicepacks in `BepInEx/Voicepacks` (run the game with the mod installed if you don't see this folder).
 
-**Voicepacks must be in ZIP format!** Use the [Voicepack Packer](https://github.com/DeadlyKitten/NickVoicepackPacker) to create your own custom voicepacks.
+**Voicepacks must be in .VOICEPACK (preferred) or .ZIP (legacy) format!** Use the [Voicepack Packer](https://github.com/DeadlyKitten/NickVoicepackPacker) to create your own custom voicepacks.
 
 Only use one per character, additional voicepacks will be ignored!
 
