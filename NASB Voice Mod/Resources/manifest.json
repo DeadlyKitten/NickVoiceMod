@@ -1,6 +1,6 @@
 ﻿{
   "name": "Voice_Mod",
-  "version_number": "1.1.3",
+  "version_number": "1.1.4",
   "website_url": "https://github.com/DeadlyKitten/NickVoiceMod",
   "description": "This mod allows you to add custom voice lines to all characters!",
   "dependencies": [
