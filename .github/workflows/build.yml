@@ -23,22 +23,26 @@ jobs:
         find "NASB Voice Mod/bin/Release/netstandard2.0" -type f ! -name "VoiceMod.dll" -delete
         cp "LICENSE" "NASB Voice Mod/bin/Release/netstandard2.0/LICENSE.VoiceMod.txt"
         cp -a "NASB Voice Mod/Resources/." "NASB Voice Mod/bin/Release/netstandard2.0/"
-    # - name: Upload Build
-    #   if: startsWith(github.ref, 'refs/tags/') == false
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: ModAssistant-${{ github.sha }}
-    #     path: ./ModAssistant/bin/Release/
-    # - name: Extract Release Version
-    #   if: startsWith(github.ref, 'refs/tags/')
-    #   id: get_version
-    #   shell: bash
-    #   run: echo ::set-output name=version::${GITHUB_REF#refs/tags/v}
-    # - name: Release
-    #   if: startsWith(github.ref, 'refs/tags/')
-    #   uses: softprops/action-gh-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     name: Mod Assistant v${{ steps.get_version.outputs.version }}
-    #     files: ./ModAssistant/bin/Release/ModAssistant.exe
+    - name: Extract Release Version
+      if: startsWith(github.ref, 'refs/tags/')
+      id: get_version
+      shell: bash
+      run: echo ::set-output name=version::${GITHUB_REF#refs/tags/v}
+    - name: Prepare zip
+      if: startsWith(github.ref, 'refs/tags/')
+      shell: bash
+      run: zip -r VoiceMod-${{ steps.get_version.outputs.version }}.zip "NASB Voice Mod/bin/Release/netstandard2.0/"
+    - name: Upload Build
+      if: startsWith(github.ref, 'refs/tags/') == false
+      uses: actions/upload-artifact@v2
+      with:
+        name: VoiceMod-${{ github.sha }}
+        path: VoiceMod-${{ steps.get_version.outputs.version }}.zip
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        name: VoiceMod v${{ steps.get_version.outputs.version }}
+        files: VoiceMod-${{ steps.get_version.outputs.version }}.zip
