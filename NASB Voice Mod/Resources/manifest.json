@@ -4,6 +4,7 @@
   "website_url": "https://github.com/DeadlyKitten/NickVoiceMod",
   "description": "This mod allows you to add custom voice lines to all characters!",
   "dependencies": [
-    "BepInEx-BepInExPack_NASB-5.4.16"
+    "BepInEx-BepInExPack_NASB-5.4.16",
+    "Bobbie-JsonDotNet-12.0.3"
   ]
 }

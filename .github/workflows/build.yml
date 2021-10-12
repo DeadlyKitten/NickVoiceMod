@@ -22,6 +22,7 @@ jobs:
       run: |
         find "NASB Voice Mod/bin/Release/netstandard2.0" -type f ! -name "VoiceMod.dll" -delete
         cp "LICENSE" "NASB Voice Mod/bin/Release/netstandard2.0/LICENSE.VoiceMod.txt"
+        cp "README.md" "NASB Voice Mod/bin/Release/netstandard2.0/README.md"
         cp -a "NASB Voice Mod/Resources/." "NASB Voice Mod/bin/Release/netstandard2.0/"
     - name: Extract Release Version
       if: startsWith(github.ref, 'refs/tags/')
@@ -43,4 +44,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         name: VoiceMod v${{ steps.get_version.outputs.version }}
-        files: VoiceMod-${{ steps.get_version.outputs.version }}.zip
+        files: |
+          "NASB Voice Mod/bin/Release/netstandard2.0/VoiceMod.dll"
+          VoiceMod-${{ steps.get_version.outputs.version }}.zip
