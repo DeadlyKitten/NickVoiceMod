@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;C:\Program Files\Steam\steamapps\common\Nickelodeon All-Star Brawl\BepInEx\plugins&quot;&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if $(ConfigurationName) == Release (&#xD;&#xA;mkdir &quot;$(TargetDir)BepInEx/Plugins&quot;&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;$(TargetDir)BepInEx/Plugins/&quot;&#xD;&#xA;7z a -tzip &quot;$(TargetDir)VoiceMod.zip&quot; &quot;$(TargetDir)BepInEx&quot;&#xD;&#xA;)" />
+    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;C:\Program Files\Steam\steamapps\common\Nickelodeon All-Star Brawl\BepInEx\plugins&quot;&#xD;&#xA;" />
   </Target>
 
 </Project>
