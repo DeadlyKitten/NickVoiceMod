@@ -5,7 +5,7 @@
     <RootNamespace>VoiceMod</RootNamespace>
     <AssemblyName>VoiceMod</AssemblyName>
     <LangVersion>8.0</LangVersion>
-    <Version>1.1.2</Version>
+    <Version>1.1.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,5 +42,7 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;C:\Program Files\Steam\steamapps\common\Nickelodeon All-Star Brawl\BepInEx\plugins&quot;&#xD;&#xA;)" />
   </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties resources_4manifest_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
