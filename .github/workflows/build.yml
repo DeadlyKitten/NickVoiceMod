@@ -45,5 +45,5 @@ jobs:
       with:
         name: VoiceMod v${{ steps.get_version.outputs.version }}
         files: |
-          "NASB Voice Mod/bin/Release/netstandard2.0/VoiceMod.dll"
+          NASB Voice Mod/bin/Release/netstandard2.0/VoiceMod.dll
           VoiceMod-${{ steps.get_version.outputs.version }}.zip
