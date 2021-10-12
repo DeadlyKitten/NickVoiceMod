@@ -46,6 +46,11 @@ namespace VoiceMod.Managers
             string[] supportedFileTypes = { ".zip", ".voicepack" };
             var files = Directory.GetFiles(folder).Where(x => supportedFileTypes.Contains(Path.GetExtension(x).ToLower()));
 
+            foreach (var subFolder in Directory.GetDirectories(folder))
+            {
+                files = files.Concat(Directory.GetFiles(subFolder).Where(x => supportedFileTypes.Contains(Path.GetExtension(x).ToLower())));
+            }
+
             foreach (var file in files)
             {
                 try
