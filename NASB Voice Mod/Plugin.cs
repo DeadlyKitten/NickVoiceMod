@@ -2,6 +2,8 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using VoiceMod.Managers;
+using BepInEx.Configuration;
+using System.IO;
 
 namespace VoiceMod
 {
@@ -9,6 +11,7 @@ namespace VoiceMod
     public class Plugin : BaseUnityPlugin
     {
         internal static Plugin Instance;
+        internal static ConfigEntry<bool> PreloadAllClips;
 
         void Awake()
         {
@@ -18,6 +21,9 @@ namespace VoiceMod
                 return;
             }
             Instance = this;
+
+            var config = new ConfigFile(Path.Combine(Paths.ConfigPath, "VoiceMod.cfg"), true);
+            PreloadAllClips = config.Bind<bool>("Settings", "Preload Clips on Game Start", false, "If you're having issues with lag, turn this setting on to prevent loading clip files during gameplay.");
 
             var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
             harmony.PatchAll();

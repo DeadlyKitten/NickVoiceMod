@@ -89,6 +89,12 @@ namespace VoiceMod.Managers
                 }
             }
 
+            if (Plugin.PreloadAllClips.Value)
+            {
+                foreach (var voicepack in voicepacks)
+                    voicepack.LoadClips();
+            }
+
             stopwatch.Stop();
             ThreadingHelper.Instance.StartSyncInvoke(() =>
             {
