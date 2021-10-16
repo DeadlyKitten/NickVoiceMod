@@ -11,15 +11,18 @@ namespace VoiceMod.Controllers
     class VoiceController : MonoBehaviour
     {
         private string agentId;
+        private GameAgent agent;
         private GameAgentStateMachine stateMachine;
         private Voicepack voicepack;
         private readonly Dictionary<int, string> lookup = new Dictionary<int, string>();
+        private Dictionary<string, int> stateIdDict;
 
         void Start()
         {
-            agentId = GetComponent<GameAgent>()?.GameUniqueIdentifier;
+            agent = GetComponent<GameAgent>();
+            agentId = agent?.GameUniqueIdentifier;
             stateMachine = GetComponent<GameAgentStateMachine>();
-            var stateIdDict = stateMachine.GetPrivateField<Dictionary<string, int>>("stateIdDict");
+            stateIdDict = stateMachine.GetPrivateField<Dictionary<string, int>>("stateIdDict");
 
             if (agentId == null ||
                 stateMachine == null ||
@@ -64,10 +67,20 @@ namespace VoiceMod.Controllers
             {
                 if (lookup.TryGetValue(stateMachine.CurrentStateId, out var id))
                 {
-                    voicepack.Play(id);
+                    int entryId = stateIdDict["entrance"];
+                    if (stateMachine.CurrentStateId == entryId)
+                        Invoke("PlayEntranceAudio", agent.playerIndex * 1.25f);
+                    else voicepack.Play(id);
                 }
             }
             stateLastFrame = stateMachine.CurrentStateId;
+        }
+
+        private void PlayEntranceAudio()
+        {
+            //All the checking and tryGets were done already. We _know_ this exists or the code wouldn't have gotten this far
+            string id = lookup[stateIdDict["entrance"]];
+            voicepack.Play(id);
         }
     }
 }
